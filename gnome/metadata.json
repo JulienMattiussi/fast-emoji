@@ -1,0 +1,8 @@
+{
+  "uuid": "fast-emoji@yavadeus",
+  "name": "Fast Emoji",
+  "description": "Quickly copy emojis to your clipboard from the top bar",
+  "shell-version": ["46"],
+  "version": 1,
+  "url": ""
+}

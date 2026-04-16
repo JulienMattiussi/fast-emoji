@@ -1,0 +1,24 @@
+.fast-emoji-btn {
+  font-size: 22px;
+  padding: 6px 8px;
+  margin: 2px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  min-width: 36px;
+  min-height: 36px;
+  text-align: center;
+}
+
+.fast-emoji-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(108, 99, 255, 0.6);
+}
+
+.fast-emoji-btn:active {
+  background-color: rgba(108, 99, 255, 0.3);
+}
+
+.fast-emoji-copied {
+  background-color: rgba(46, 125, 50, 0.4) !important;
+  border-color: rgba(76, 175, 80, 0.6) !important;
+}
