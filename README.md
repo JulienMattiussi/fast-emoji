@@ -72,6 +72,29 @@ Quand les deux extensions sont installees sur le meme poste, elles partagent la 
 
 Chaque extension fonctionne aussi de maniere autonome si l'autre n'est pas installee.
 
+### Comment ca marche
+
+Les extensions navigateur sont sandboxees et n'ont pas acces au filesystem. Le dossier `native-host/` contient un petit script Python qui sert de pont via le mecanisme [Native Messaging](https://developer.chrome.com/docs/extensions/develop/concepts/native-messaging) :
+
+```
+Navigateur → service worker → native messaging → fast-emoji-host.py → favorites.json ← GNOME extension
+```
+
+`make install-bridge` enregistre ce script aupres du navigateur. Sans le bridge, chaque extension fonctionne independamment mais sans partage de config.
+
+## Structure du projet
+
+```
+fast-emoji/
+├── web-extension/         # Extension navigateur (Chrome, Firefox, Brave)
+├── gnome-extension/       # Extension GNOME Shell
+├── native-host/           # Script Python de bridge (native messaging)
+├── favorites.json         # Config partagee (generee au runtime)
+├── install.sh             # Installation interactive
+├── Makefile               # Commandes make
+└── LICENSE
+```
+
 ## Licence
 
 MIT

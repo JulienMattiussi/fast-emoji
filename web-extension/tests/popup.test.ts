@@ -164,6 +164,12 @@ describe("popup - settings view", () => {
     });
   });
 
+  it("should display signature", () => {
+    const signature = document.getElementById("signature");
+    expect(signature).not.toBeNull();
+    expect(signature!.textContent).toContain("YavaDeus");
+  });
+
   it("should return to main view when back button is clicked", async () => {
     document.getElementById("back-btn")!.click();
 
