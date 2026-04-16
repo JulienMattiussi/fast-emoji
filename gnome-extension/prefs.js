@@ -9,18 +9,7 @@ const DEFAULT_EMOJIS = [
   "👍", "😂", "👎", "💩", "🎉", "🤣", "👀", "❤️", "🫶", "😘",
 ];
 
-const EMOJI_BANK = [
-  { name: "Smileys", emojis: ["😀","😃","😄","😁","😆","😅","🤣","😂","🙂","🙃","😉","😊","😇","🥰","😍","🤩","😘","😗","😚","😙","🥲","😋","😛","😜","🤪","😝","🤑","🤗","🤭","🤫","🤔","🫡","🤐","🤨","😐","😑","😶","🫥","😏","😒","🙄","😬","🤥","😌","😔","😪","🤤","😴","😷","🤒","🤕","🤢","🤮","🥵","🥶","🥴","😵","🤯","🤠","🥳","🥸","😎","🤓","🧐","😕","🫤","😟","🙁","😮","😯","😲","😳","🥺","🥹","😦","😧","😨","😰","😥","😢","😭","😱","😖","😣","😞","😓","😩","😫","🥱","😤","😡","😠","🤬","😈","👿","💀","☠️","💩","🤡","👹","👺","👻","👽","🤖","😺","😸","😹","😻","😼","😽","🙀","😿","😾"] },
-  { name: "Gestes", emojis: ["👋","🤚","🖐️","✋","🖖","🫱","🫲","🫳","🫴","👌","🤌","🤏","✌️","🤞","🫰","🤟","🤘","🤙","👈","👉","👆","🖕","👇","☝️","🫵","👍","👎","✊","👊","🤛","🤜","👏","🙌","🫶","👐","🤲","🤝","🙏","✍️","💅","🤳","💪","🦾","🦿","🦵","🦶","👂","🦻","👃","👀","👁️","👅","👄","🫦"] },
-  { name: "Coeurs", emojis: ["❤️","🧡","💛","💚","💙","💜","🖤","🤍","🤎","❤️‍🔥","❤️‍🩹","💔","💕","💞","💓","💗","💖","💘","💝","💟","♥️","🩷","🩵","🩶"] },
-  { name: "Celebration", emojis: ["🎉","🎊","🎈","🎁","🎀","🪅","🎆","🎇","✨","🎍","🎎","🎏","🎐","🎑","🎄","🎃","🧨","🪩","🏆","🥇","🥈","🥉","🏅","🎖️"] },
-  { name: "Animaux", emojis: ["🐶","🐱","🐭","🐹","🐰","🦊","🐻","🐼","🐨","🐯","🦁","🐮","🐷","🐸","🐵","🙈","🙉","🙊","🐔","🐧","🐦","🦄","🐝","🐛","🦋","🐌","🐞","🐢","🐍","🦖"] },
-  { name: "Nourriture", emojis: ["🍎","🍐","🍊","🍋","🍌","🍉","🍇","🍓","🫐","🍒","🍑","🥭","🍍","🥥","🥝","🍔","🍕","🌭","🍟","🌮","🍣","🍩","🍪","🎂","🍰","☕","🍺","🍷","🥂","🍾"] },
-  { name: "Objets", emojis: ["⌚","📱","💻","⌨️","🖥️","🖨️","🖱️","💡","🔦","🕯️","📷","🎥","🎬","📺","🔔","🔕","🎵","🎶","🎤","🎧","📻","🎸","🎹","🎺","🔑","🔒","🔓","📌","📎","✏️"] },
-  { name: "Symboles", emojis: ["✅","❌","❓","❗","‼️","⁉️","💯","🔥","💫","⭐","🌟","💥","💢","💤","💬","👁️‍🗨️","🗨️","💭","🕳️","⚠️","♻️","🚫","⛔","🏳️","🏴","🚀","⚡","☀️","🌈","🔴"] },
-];
-
-function resolveConfigFile(extensionPath) {
+function resolveRepoDir(extensionPath) {
   try {
     const info = Gio.File.new_for_path(extensionPath).query_info(
       "standard::is-symlink,standard::symlink-target",
@@ -28,14 +17,26 @@ function resolveConfigFile(extensionPath) {
       null,
     );
     if (info.get_is_symlink()) {
-      const target = info.get_symlink_target();
-      const repoDir = GLib.path_get_dirname(target);
-      return GLib.build_filenamev([repoDir, "favorites.json"]);
+      return GLib.path_get_dirname(info.get_symlink_target());
     }
   } catch {
     // Not a symlink
   }
-  return GLib.build_filenamev([extensionPath, "favorites.json"]);
+  return extensionPath;
+}
+
+function loadEmojiBank(repoDir) {
+  const path = GLib.build_filenamev([repoDir, "emoji-bank.json"]);
+  const file = Gio.File.new_for_path(path);
+  try {
+    const [ok, contents] = file.load_contents(null);
+    if (ok) {
+      return JSON.parse(new TextDecoder().decode(contents));
+    }
+  } catch {
+    // Fall back
+  }
+  return [];
 }
 
 function loadFavorites(configFile) {
@@ -68,7 +69,9 @@ function saveFavorites(configFile, favorites) {
 
 export default class FastEmojiPreferences extends ExtensionPreferences {
   fillPreferencesWindow(window) {
-    const configFile = resolveConfigFile(this.path);
+    const repoDir = resolveRepoDir(this.path);
+    const configFile = GLib.build_filenamev([repoDir, "favorites.json"]);
+    const emojiBank = loadEmojiBank(repoDir);
     let favorites = loadFavorites(configFile);
 
     const page = new Adw.PreferencesPage({
@@ -76,7 +79,7 @@ export default class FastEmojiPreferences extends ExtensionPreferences {
       icon_name: "face-smile-symbolic",
     });
 
-    for (const category of EMOJI_BANK) {
+    for (const category of emojiBank) {
       const group = new Adw.PreferencesGroup({
         title: category.name,
       });
@@ -117,7 +120,7 @@ export default class FastEmojiPreferences extends ExtensionPreferences {
       page.add(group);
     }
 
-    // Signature
+    // Signature (derniere categorie)
     const sigGroup = new Adw.PreferencesGroup();
     const sigLabel = new Gtk.Label({
       label: "with ❤\uFE0F by YavaDeus",
