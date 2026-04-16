@@ -105,6 +105,12 @@ function renderSettings() {
   }
 
   app.appendChild(bank);
+
+  // Signature
+  const signature = document.createElement("div");
+  signature.id = "signature";
+  signature.textContent = "with ❤️ by YavaDeus";
+  app.appendChild(signature);
 }
 
 function toggleFavorite(btn: HTMLButtonElement, emoji: string) {
