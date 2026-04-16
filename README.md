@@ -24,6 +24,10 @@ Puis dans Chrome :
 
 Cliquer sur l'icône de l'extension dans la barre d'outils Chrome. La popup s'ouvre avec la grille d'emojis. Un clic copie l'emoji dans le presse-papier — le bouton passe brièvement en vert pour confirmer.
 
+### Personnaliser les emojis
+
+Cliquer sur l'icône ⚙️ dans la barre de titre pour ouvrir la banque d'emojis. Les emojis sont classés par catégorie (Smileys, Gestes, Coeurs, Celebration, Animaux, Nourriture, Objets, Symboles). Cliquer sur un emoji pour l'ajouter ou le retirer de la sélection. Les choix sont sauvegardés localement.
+
 ## Développement
 
 ```bash
@@ -34,18 +38,18 @@ make check         # Lancer tous les checks (types + format + tests)
 
 ### Commandes disponibles
 
-| Commande | Description |
-|---|---|
-| `make install` | Installer les dépendances |
-| `make build` | Build l'extension dans `dist/` |
-| `make watch` | Mode dev avec rebuild on change |
-| `make clean` | Nettoyer `dist/` et rebuild |
-| `make typecheck` | Vérification des types TypeScript |
-| `make format` | Formater le code avec Prettier |
-| `make format-check` | Vérifier le formatage (CI) |
-| `make test` | Lancer les tests |
-| `make test-watch` | Tests en mode watch |
-| `make check` | Tous les checks (typecheck + format + tests) |
+| Commande            | Description                                  |
+| ------------------- | -------------------------------------------- |
+| `make install`      | Installer les dépendances                    |
+| `make build`        | Build l'extension dans `dist/`               |
+| `make watch`        | Mode dev avec rebuild on change              |
+| `make clean`        | Nettoyer `dist/` et rebuild                  |
+| `make typecheck`    | Vérification des types TypeScript            |
+| `make format`       | Formater le code avec Prettier               |
+| `make format-check` | Vérifier le formatage (CI)                   |
+| `make test`         | Lancer les tests                             |
+| `make test-watch`   | Tests en mode watch                          |
+| `make check`        | Tous les checks (typecheck + format + tests) |
 
 ## Stack technique
 
@@ -67,14 +71,18 @@ fast-emoji/
 ├── Makefile
 ├── icons/               # Icônes 16, 48, 128px
 ├── src/
-│   ├── emojis.ts        # Liste des emojis (données)
+│   ├── emojis.ts        # Liste des emojis par défaut
+│   ├── emoji-bank.ts    # Banque complète (~335 emojis, 8 catégories)
+│   ├── storage.ts       # Persistance des favoris (chrome.storage.local)
 │   ├── popup.html
 │   ├── popup.css
 │   └── popup/
-│       └── index.ts     # Logique popup + copie clipboard
+│       └── index.ts     # Logique popup, settings, copie clipboard
 └── tests/
-    ├── emojis.test.ts   # Tests sur la liste d'emojis
-    └── popup.test.ts    # Tests DOM (rendu, clipboard, feedback)
+    ├── emojis.test.ts   # Tests sur la liste par défaut
+    ├── emoji-bank.test.ts # Tests sur la banque d'emojis
+    ├── storage.test.ts  # Tests du module de persistance
+    └── popup.test.ts    # Tests DOM (rendu, settings, clipboard)
 ```
 
 ## Licence

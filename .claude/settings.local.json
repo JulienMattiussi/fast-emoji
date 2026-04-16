@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "Bash(npm install:*)",
+      "Bash(npm test:*)",
+      "Bash(npx:*)",
+      "Bash(node *)",
+      "Bash(make:*)",
+      "Bash(make check)",
+      "Bash(mkdir:*)",
+      "Bash(ls:*)",
+      "Bash(which:*)",
+      "Bash(wc:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git mv:*)",
+      "Bash(convert *)",
+      "Bash(google-chrome-stable *)"
+    ]
+  }
+}
