@@ -133,6 +133,22 @@ const FastEmojiButton = GObject.registerClass(
 
       item.add_child(grid);
       this.menu.addMenuItem(item);
+
+      // Settings button
+      this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+      const settingsItem = new PopupMenu.PopupMenuItem("⚙️  Personnaliser");
+      settingsItem.connect("activate", () => {
+        this._openPrefs();
+      });
+      this.menu.addMenuItem(settingsItem);
+    }
+
+    _openPrefs() {
+      const subprocess = new Gio.Subprocess({
+        argv: ["gnome-extensions", "prefs", "fast-emoji@yavadeus"],
+        flags: Gio.SubprocessFlags.NONE,
+      });
+      subprocess.init(null);
     }
 
     destroy() {

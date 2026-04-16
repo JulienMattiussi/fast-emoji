@@ -22,6 +22,22 @@ make enable
 
 > **Astuce :** pour savoir si vous etes sur X11 ou Wayland, lancez `echo $XDG_SESSION_TYPE` dans un terminal.
 
+## Utilisation
+
+Cliquer sur l'icone Fast Emoji dans la barre du haut. La grille d'emojis s'ouvre. Un clic copie l'emoji dans le presse-papier.
+
+## Personnalisation
+
+Cliquer sur **⚙️ Personnaliser** en bas du menu pour ouvrir la fenetre de preferences. Les emojis sont classes par categorie -- cliquer pour ajouter ou retirer un emoji des favoris.
+
+La personnalisation est aussi accessible via :
+
+```bash
+gnome-extensions prefs fast-emoji@yavadeus
+```
+
+Si l'extension navigateur est aussi installee, la configuration est partagee automatiquement.
+
 ## Desinstallation
 
 ```bash
@@ -30,19 +46,6 @@ make disable
 make uninstall
 ```
 
-## Personnalisation
-
-Editer le fichier `favorites.json` a la racine du depot :
-
-```json
-["🔥", "🚀", "✅", "❌", "💯"]
-```
-
-Puis redemarrer GNOME Shell pour appliquer :
-
-- **X11 :** `Alt+F2` → `r` → `Enter`
-- **Wayland :** se deconnecter/reconnecter
-
 ## Compatibilite
 
-- GNOME Shell 46 (Ubuntu 24.04)
+- GNOME Shell 46 (Ubuntu 24.04, Fedora 40, Arch...)
