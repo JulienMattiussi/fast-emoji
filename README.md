@@ -8,25 +8,22 @@ Extension Chrome/Firefox minimaliste pour copier un emoji dans le presse-papier 
 
 ## Installation
 
-```bash
-make install
-make build
-```
-
-Puis charger l'extension :
+Le dossier `dist/` est inclus dans le dépôt — pas besoin de build.
 
 **Chrome :**
 
-1. Ouvrir `chrome://extensions`
-2. Activer le **Mode développeur** (en haut à droite)
-3. Cliquer sur **Charger l'extension non empaquetée**
-4. Sélectionner le dossier `dist/`
+1. Cloner le dépôt ou télécharger le ZIP
+2. Ouvrir `chrome://extensions`
+3. Activer le **Mode développeur** (en haut à droite)
+4. Cliquer sur **Charger l'extension non empaquetée**
+5. Sélectionner le dossier `dist/`
 
 **Firefox :**
 
-1. Ouvrir `about:debugging#/runtime/this-firefox`
-2. Cliquer sur **Charger un module complémentaire temporaire**
-3. Sélectionner le fichier `dist/manifest.json`
+1. Cloner le dépôt ou télécharger le ZIP
+2. Ouvrir `about:debugging#/runtime/this-firefox`
+3. Cliquer sur **Charger un module complémentaire temporaire**
+4. Sélectionner le fichier `dist/manifest.json`
 
 ## Utilisation
 
