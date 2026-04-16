@@ -4,11 +4,15 @@
   "version": "1.0.0",
   "author": "YavaDeus",
   "description": "Quickly copy emojis to your clipboard",
-  "permissions": ["storage"],
+  "permissions": ["storage", "nativeMessaging"],
   "browser_specific_settings": {
     "gecko": {
+      "id": "fast-emoji@yavadeus",
       "strict_min_version": "121.0"
     }
+  },
+  "background": {
+    "service_worker": "service-worker.js"
   },
   "action": {
     "default_popup": "popup.html",

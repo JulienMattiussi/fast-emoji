@@ -22,13 +22,33 @@ const DEFAULT_EMOJIS = [
   "😘",
 ];
 
-const FAVORITES_FILE = "favorites.json";
+// Resolve config file path. The extension is symlinked:
+//   ~/.local/share/gnome-shell/extensions/fast-emoji@yavadeus → <repo>/gnome/
+// We resolve the symlink and look for favorites.json in the repo root.
+function resolveConfigFile(extensionPath) {
+  try {
+    const info = Gio.File.new_for_path(extensionPath).query_info(
+      "standard::is-symlink,standard::symlink-target",
+      Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
+      null,
+    );
+    if (info.get_is_symlink()) {
+      const target = info.get_symlink_target();
+      const repoDir = GLib.path_get_dirname(target);
+      return GLib.build_filenamev([repoDir, "favorites.json"]);
+    }
+  } catch {
+    // Not a symlink
+  }
+  return GLib.build_filenamev([extensionPath, "favorites.json"]);
+}
 
 const FastEmojiButton = GObject.registerClass(
   class FastEmojiButton extends PanelMenu.Button {
     _init(extensionPath) {
       super._init(0.0, "Fast Emoji");
-      this._extensionPath = extensionPath;
+
+      this._configFile = resolveConfigFile(extensionPath);
 
       const gicon = Gio.icon_new_for_string(
         GLib.build_filenamev([extensionPath, "icon.png"]),
@@ -42,6 +62,38 @@ const FastEmojiButton = GObject.registerClass(
 
       this._favorites = this._loadFavorites();
       this._buildMenu();
+
+      // Watch for config changes (e.g. from Chrome extension)
+      const file = Gio.File.new_for_path(this._configFile);
+      this._configMonitor = file.monitor_file(
+        Gio.FileMonitorFlags.NONE,
+        null,
+      );
+      this._configMonitor.connect(
+        "changed",
+        (_monitor, _file, _other, eventType) => {
+          if (eventType === Gio.FileMonitorEvent.CHANGES_DONE_HINT) {
+            this._favorites = this._loadFavorites();
+            this._buildMenu();
+          }
+        },
+      );
+    }
+
+    _loadFavorites() {
+      const file = Gio.File.new_for_path(this._configFile);
+      try {
+        const [ok, contents] = file.load_contents(null);
+        if (ok) {
+          const parsed = JSON.parse(new TextDecoder().decode(contents));
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            return parsed;
+          }
+        }
+      } catch {
+        // File doesn't exist yet
+      }
+      return [...DEFAULT_EMOJIS];
     }
 
     _buildMenu() {
@@ -83,27 +135,12 @@ const FastEmojiButton = GObject.registerClass(
       this.menu.addMenuItem(item);
     }
 
-    _getFavoritesPath() {
-      return GLib.build_filenamev([this._extensionPath, FAVORITES_FILE]);
-    }
-
-    _loadFavorites() {
-      const path = this._getFavoritesPath();
-      const file = Gio.File.new_for_path(path);
-
-      try {
-        const [ok, contents] = file.load_contents(null);
-        if (ok) {
-          const parsed = JSON.parse(new TextDecoder().decode(contents));
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            return parsed;
-          }
-        }
-      } catch {
-        // File doesn't exist yet, use defaults
+    destroy() {
+      if (this._configMonitor) {
+        this._configMonitor.cancel();
+        this._configMonitor = null;
       }
-
-      return [...DEFAULT_EMOJIS];
+      super.destroy();
     }
   },
 );

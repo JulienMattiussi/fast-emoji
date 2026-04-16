@@ -5,7 +5,7 @@ Extension GNOME Shell pour copier un emoji dans le presse-papier depuis la barre
 ## Installation
 
 ```bash
-cd gnome
+cd gnome-extension
 make install
 ```
 
@@ -25,14 +25,14 @@ make enable
 ## Desinstallation
 
 ```bash
-cd gnome
+cd gnome-extension
 make disable
 make uninstall
 ```
 
 ## Personnalisation
 
-Editer le fichier `gnome/favorites.json` avec la liste d'emojis souhaitee :
+Editer le fichier `favorites.json` a la racine du depot :
 
 ```json
 ["🔥", "🚀", "✅", "❌", "💯"]

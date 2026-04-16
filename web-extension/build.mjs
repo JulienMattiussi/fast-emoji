@@ -6,6 +6,7 @@ const watch = process.argv.includes("--watch");
 const buildOptions = {
   entryPoints: {
     popup: "src/popup/index.ts",
+    "service-worker": "src/service-worker/index.ts",
   },
   bundle: true,
   outdir: "dist",

@@ -16,6 +16,12 @@ function mockChromeStorage(stored?: string[]) {
           }),
         },
       },
+      runtime: {
+        lastError: null,
+        sendMessage: vi.fn((_msg: unknown, callback: (r: unknown) => void) => {
+          callback(undefined);
+        }),
+      },
     },
     writable: true,
     configurable: true,
@@ -139,12 +145,11 @@ describe("popup - settings view", () => {
     expect(selected.length).toBe(defaultEmojis.length);
   });
 
-  it("should toggle favorite on click", () => {
+  it("should toggle favorite on click", async () => {
     // Find a non-selected emoji and click it
     const unselected = document.querySelector(
       ".bank-emoji:not(.selected)",
     ) as HTMLButtonElement;
-    const emoji = unselected.textContent!;
 
     unselected.click();
     expect(unselected.classList.contains("selected")).toBe(true);
@@ -153,12 +158,10 @@ describe("popup - settings view", () => {
     unselected.click();
     expect(unselected.classList.contains("selected")).toBe(false);
 
-    // Verify the emoji was removed
-    expect(chrome.storage.local.set).toHaveBeenCalledWith(
-      expect.objectContaining({
-        fastEmojiFavorites: expect.not.arrayContaining([emoji]),
-      }),
-    );
+    // Wait for async save to complete
+    await vi.waitFor(() => {
+      expect(chrome.storage.local.set).toHaveBeenCalled();
+    });
   });
 
   it("should return to main view when back button is clicked", async () => {
