@@ -1,4 +1,4 @@
-# Fast Emoji ⚡
+# <img src="icons/icon-48.png" width="32" height="32" alt="icon" /> Fast Emoji
 
 Extension Chrome/Firefox minimaliste pour copier un emoji dans le presse-papier en un clic.
 
