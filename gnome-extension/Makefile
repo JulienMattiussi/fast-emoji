@@ -19,9 +19,11 @@ uninstall: ## Remove extension
 
 restart: ## Restart GNOME Shell (Wayland: log out/in required)
 	@if [ "$$XDG_SESSION_TYPE" = "x11" ]; then \
-		busctl --user call org.gnome.Shell /org/gnome/Shell org.gnome.Shell Eval s 'Meta.restart("Restarting…")' 2>/dev/null || echo "Restart manually (Alt+F2 → r → Enter)"; \
+		busctl --user call org.gnome.Shell /org/gnome/Shell org.gnome.Shell Eval s 'Meta.restart("Restarting…")' > /dev/null 2>&1 \
+		&& echo "GNOME Shell redemarré." \
+		|| echo "Redemarrage automatique echoué. Faites Alt+F2 → r → Enter manuellement."; \
 	else \
-		echo "Wayland: please log out and log back in to restart GNOME Shell."; \
+		echo "Wayland detecte : deconnectez-vous puis reconnectez-vous pour redemarrer GNOME Shell."; \
 	fi
 
 enable: ## Enable the extension via gnome-extensions

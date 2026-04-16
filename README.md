@@ -14,25 +14,57 @@ Copiez un emoji dans le presse-papier en un clic. Disponible en extension naviga
 | [**web-extension/**](web-extension/) | Firefox 121+ (Manifest V3) | Windows, macOS, Linux |
 | [**gnome-extension/**](gnome-extension/) | GNOME Shell 46 | Linux (Ubuntu 24.04, Fedora 40, Arch...) |
 
-La config partagee entre les extensions necessite Linux (native messaging + GNOME).
-
 Voir le README de chaque extension pour les instructions detaillees.
 
-## Installation complete
+## Installation
 
-Le script `install.sh` configure tout en une fois :
+### Extension navigateur seule
+
+Charger `web-extension/dist/` dans le navigateur (voir [web-extension/README](web-extension/)).
+
+### Extension GNOME seule
 
 ```bash
-./install.sh
+make install-gnome
 ```
 
-Il propose d'installer :
-- L'extension GNOME Shell
-- Le bridge de config partagee pour Chrome/Brave/Firefox
+Puis redemarrer GNOME Shell (`Alt+F2` → `r` → `Enter` sur X11) et activer :
 
-Apres avoir lance le script, **recharger l'extension dans le navigateur** pour qu'elle detecte le bridge :
-- **Chrome/Brave :** aller sur la page des extensions et cliquer sur la fleche de rechargement de Fast Emoji
-- **Firefox :** aller sur `about:debugging#/runtime/this-firefox` et cliquer sur "Recharger"
+```bash
+gnome-extensions enable fast-emoji@yavadeus
+```
+
+### Config partagee (navigateur + GNOME)
+
+Pour que les deux extensions partagent la meme liste d'emojis, configurer le bridge avec l'ID de l'extension navigateur :
+
+```bash
+make install-bridge ID=<id_extension>
+```
+
+L'ID est visible dans la page des extensions du navigateur (`chrome://extensions`, `brave://extensions`, etc.) avec le mode developpeur active.
+
+Apres la commande, **recharger l'extension dans le navigateur** pour qu'elle detecte le bridge.
+
+> Si vous reinstallez l'extension navigateur, l'ID peut changer. Relancez `make install-bridge ID=<nouvel_id>` dans ce cas.
+
+### Installation interactive
+
+Pour tout configurer en une fois (GNOME + bridge) :
+
+```bash
+make install
+```
+
+## Commandes disponibles
+
+| Commande | Description |
+| --- | --- |
+| `make install` | Installation interactive (GNOME + bridge) |
+| `make install-gnome` | Installer l'extension GNOME Shell |
+| `make install-bridge ID=...` | Configurer le bridge navigateur |
+| `make uninstall` | Tout desinstaller |
+| `make uninstall-gnome` | Desinstaller l'extension GNOME |
 
 ## Config partagee
 
