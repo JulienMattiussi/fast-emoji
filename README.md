@@ -1,6 +1,6 @@
 # Fast Emoji ⚡
 
-Extension Chrome minimaliste pour copier un emoji dans le presse-papier en un clic.
+Extension Chrome/Firefox minimaliste pour copier un emoji dans le presse-papier en un clic.
 
 <p align="center">
   <img src="docs/preview.png" alt="Fast Emoji popup" width="160" />
@@ -13,12 +13,20 @@ make install
 make build
 ```
 
-Puis dans Chrome :
+Puis charger l'extension :
+
+**Chrome :**
 
 1. Ouvrir `chrome://extensions`
 2. Activer le **Mode développeur** (en haut à droite)
 3. Cliquer sur **Charger l'extension non empaquetée**
 4. Sélectionner le dossier `dist/`
+
+**Firefox :**
+
+1. Ouvrir `about:debugging#/runtime/this-firefox`
+2. Cliquer sur **Charger un module complémentaire temporaire**
+3. Sélectionner le fichier `dist/manifest.json`
 
 ## Utilisation
 

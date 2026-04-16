@@ -5,6 +5,11 @@
   "author": "YavaDeus",
   "description": "Quickly copy emojis to your clipboard",
   "permissions": ["storage"],
+  "browser_specific_settings": {
+    "gecko": {
+      "strict_min_version": "121.0"
+    }
+  },
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
