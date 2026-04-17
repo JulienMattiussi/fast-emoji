@@ -12,7 +12,7 @@ make install
 Puis redemarrer GNOME Shell pour que l'extension soit detectee :
 
 - **X11 :** `Alt+F2` → taper `r` → `Enter`
-- **Wayland :** se deconnecter puis se reconnecter
+- **Wayland :** se deconnecter puis se reconnecter, ou ouvrir [extensions.gnome.org/local](https://extensions.gnome.org/local/) dans un navigateur (necessite l'extension navigateur [GNOME Shell integration](https://addons.mozilla.org/firefox/addon/gnome-shell-integration/)) et activer Fast Emoji depuis la liste
 
 Enfin, activer l'extension :
 

@@ -28,7 +28,7 @@ Charger `web-extension/dist/` dans le navigateur (voir [web-extension/README](we
 make install-gnome
 ```
 
-Puis redemarrer GNOME Shell (`Alt+F2` → `r` → `Enter` sur X11) et activer :
+Puis redemarrer GNOME Shell pour que l'extension soit detectee (voir [gnome-extension/README](gnome-extension/) pour les details selon X11/Wayland), et activer :
 
 ```bash
 gnome-extensions enable fast-emoji@yavadeus
